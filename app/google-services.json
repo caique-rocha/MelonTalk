@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "675331162737",
+    "firebase_url": "https://melontalk-8b528.firebaseio.com",
+    "project_id": "melontalk-8b528",
+    "storage_bucket": "melontalk-8b528.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675331162737:android:f01fabfdcd5dcb9f",
+        "android_client_info": {
+          "package_name": "com.melontalk.footlessbird.melontalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675331162737-0ckoluu5ehdk4qd1qt6e2gpmouf5nd9r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.melontalk.footlessbird.melontalk",
+            "certificate_hash": "d2568efc445e8391a84389e6f60842ac695755cd"
+          }
+        },
+        {
+          "client_id": "675331162737-co4ct4gc2fiq5kqf8jgsv5htrjpo4prt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfbnQmnMiADvN_5T9I0Wx1vcPo2sNEDL0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675331162737-co4ct4gc2fiq5kqf8jgsv5htrjpo4prt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

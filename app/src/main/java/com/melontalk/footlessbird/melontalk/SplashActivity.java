@@ -1,11 +1,13 @@
 package com.melontalk.footlessbird.melontalk;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +24,9 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        //  remove status bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         linearLayout = findViewById(R.id.splashActivity_linearLayout);
 
@@ -68,6 +73,8 @@ public class SplashActivity extends AppCompatActivity {
             });
 
             builder.create().show();
+        }else{
+            startActivity(new Intent(this, LoginActivity.class));
         }
     }
 }

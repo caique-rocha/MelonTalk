@@ -1,6 +1,8 @@
 package com.melontalk.footlessbird.melontalk.fragment;
 
+import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.melontalk.footlessbird.melontalk.R;
+import com.melontalk.footlessbird.melontalk.chat.MessageActivity;
 import com.melontalk.footlessbird.melontalk.model.UserModel;
 
 import java.util.ArrayList;
@@ -75,6 +78,18 @@ public class PeopleFragment extends Fragment {
                     .into(((CustomViewHolder) holder).imageView);
             ((CustomViewHolder) holder).textView.setText(userModels.get(position).userName);
 
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                    ActivityOptions activityOptions = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        activityOptions = ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.fromright, R.anim.toleft);
+                        startActivity(intent, activityOptions.toBundle());
+
+                    }
+                }
+            });
         }
 
         @Override

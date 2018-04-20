@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(email.getText().toString() == null || name.getText().toString() == null || password.getText().toString() == null){
+                if (email.getText().toString() == null || name.getText().toString() == null || password.getText().toString() == null || imageUri == null) {
                     return;
                 }
 
@@ -83,8 +84,13 @@ public class RegisterActivity extends AppCompatActivity {
                                         UserModel userModel = new UserModel();
                                         userModel.userName = name.getText().toString();
                                         userModel.profileImageUrl = imageUrl;
-                                        FirebaseDatabase.getInstance().getReference().child("users").child(userId).setValue(userModel);
+                                        FirebaseDatabase.getInstance().getReference().child("users").child(userId).setValue(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                RegisterActivity.this.finish();
 
+                                            }
+                                        });
                                     }
                                 });
 
@@ -100,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK)
+        if (requestCode == PICK_FROM_ALBUM && resultCode == RESULT_OK)
             profile.setImageURI(data.getData());    //  changes center views
-            imageUri = data.getData();
+        imageUri = data.getData();
     }
 }

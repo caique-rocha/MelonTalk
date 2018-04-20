@@ -84,6 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         UserModel userModel = new UserModel();
                                         userModel.userName = name.getText().toString();
                                         userModel.profileImageUrl = imageUrl;
+                                        userModel.uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                         FirebaseDatabase.getInstance().getReference().child("users").child(userId).setValue(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {

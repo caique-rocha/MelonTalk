@@ -71,7 +71,7 @@ public class PeopleFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
             Glide.with(holder.itemView.getContext())
                     .load(userModels.get(position).profileImageUrl)
                     .apply(new RequestOptions().circleCrop())
@@ -82,6 +82,7 @@ public class PeopleFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                    intent.putExtra("destinationUid",userModels.get(position).uId);
                     ActivityOptions activityOptions = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         activityOptions = ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.fromright, R.anim.toleft);

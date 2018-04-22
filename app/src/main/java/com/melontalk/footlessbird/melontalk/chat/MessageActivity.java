@@ -1,9 +1,11 @@
 package com.melontalk.footlessbird.melontalk.chat;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,10 +50,10 @@ public class MessageActivity extends AppCompatActivity {
 
         uId = FirebaseAuth.getInstance().getCurrentUser().getUid();  //채팅을 요구 하는 아아디 즉 단말기에 로그인된 UID
         destinationUid = getIntent().getStringExtra("destinationUid"); // 채팅을 당하는 아이디
-        button = (Button) findViewById(R.id.messageActivity_button);
-        editText = (EditText) findViewById(R.id.messageActivity_editText);
+        button = findViewById(R.id.messageActivity_button);
+        editText = findViewById(R.id.messageActivity_editText);
 
-        recyclerView = (RecyclerView) findViewById(R.id.messageActivity_recyclerView);
+        recyclerView = findViewById(R.id.messageActivity_recyclerView);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +76,12 @@ public class MessageActivity extends AppCompatActivity {
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uId = uId;
                     comment.message = editText.getText().toString();
-                    FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment);
+                    FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            editText.setText("");
+                        }
+                    });
                 }
 
 
@@ -142,6 +151,7 @@ public class MessageActivity extends AppCompatActivity {
                     }
 
                     notifyDataSetChanged();
+                    recyclerView.scrollToPosition(comments.size() - 1);
 
 
                 }
@@ -164,11 +174,15 @@ public class MessageActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             MessageViewHolder messageViewHolder = ((MessageViewHolder) holder);
+            //  my messages
             if (comments.get(position).uId.equals(uId)) {
                 messageViewHolder.textView_message.setText(comments.get(position).message);
                 messageViewHolder.textView_message.setBackgroundResource(R.drawable.rightbubble);
                 messageViewHolder.linearLayout_destination.setVisibility(View.INVISIBLE);
+                messageViewHolder.textView_message.setTextSize(25);
+                messageViewHolder.linearLayout_main.setGravity(Gravity.RIGHT);
 
+                //  friends's messages
             } else {
                 Glide.with(holder.itemView.getContext())
                         .load(userModel.profileImageUrl)
@@ -179,6 +193,8 @@ public class MessageActivity extends AppCompatActivity {
                 messageViewHolder.textView_message.setBackgroundResource(R.drawable.leftbubble);
                 messageViewHolder.textView_message.setText(comments.get(position).message);
                 messageViewHolder.textView_message.setTextSize(25);
+                messageViewHolder.linearLayout_main.setGravity(Gravity.LEFT);
+
             }
 
         }
@@ -193,13 +209,16 @@ public class MessageActivity extends AppCompatActivity {
             public TextView textView_name;
             public ImageView imageView_profile;
             public LinearLayout linearLayout_destination;
+            public LinearLayout linearLayout_main;
 
             public MessageViewHolder(View view) {
                 super(view);
-                textView_message = (TextView) view.findViewById(R.id.itemMessages_textView_message);
+                textView_message = view.findViewById(R.id.itemMessages_textView_message);
                 textView_name = view.findViewById(R.id.itemMessages_textView_name);
                 imageView_profile = view.findViewById(R.id.itemMessages_imageView_profile);
                 linearLayout_destination = view.findViewById(R.id.itemMessages_linearLayout_destination);
+                linearLayout_main = view.findViewById(R.id.itemMessages_linearLayout_main);
+
             }
         }
     }

@@ -10,10 +10,25 @@
         android:layout_height="50dp"
         android:layout_margin="10dp" />
 
-    <TextView
-        android:id="@+id/itemChat_textView_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CHAT NAME" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemChat_textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHAT NAME" />
+
+        <TextView
+            android:id="@+id/itemChat_textView_lastMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="LAST MESSAGE" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

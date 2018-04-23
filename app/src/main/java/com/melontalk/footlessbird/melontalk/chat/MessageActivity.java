@@ -24,13 +24,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.melontalk.footlessbird.melontalk.R;
 import com.melontalk.footlessbird.melontalk.model.ChatModel;
 import com.melontalk.footlessbird.melontalk.model.UserModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -42,6 +46,8 @@ public class MessageActivity extends AppCompatActivity {
     private String chatRoomUid;
 
     private RecyclerView recyclerView;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,7 @@ public class MessageActivity extends AppCompatActivity {
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uId = uId;
                     comment.message = editText.getText().toString();
+                    comment.timeStamp = ServerValue.TIMESTAMP;
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -196,7 +203,11 @@ public class MessageActivity extends AppCompatActivity {
                 messageViewHolder.linearLayout_main.setGravity(Gravity.LEFT);
 
             }
-
+            long unixTime = (long) comments.get(position).timeStamp;
+            Date date = new Date(unixTime);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+            String time = simpleDateFormat.format(date);
+            messageViewHolder.textView_timeStamp.setText(time);
         }
 
         @Override
@@ -210,6 +221,7 @@ public class MessageActivity extends AppCompatActivity {
             public ImageView imageView_profile;
             public LinearLayout linearLayout_destination;
             public LinearLayout linearLayout_main;
+            public TextView textView_timeStamp;
 
             public MessageViewHolder(View view) {
                 super(view);
@@ -218,6 +230,7 @@ public class MessageActivity extends AppCompatActivity {
                 imageView_profile = view.findViewById(R.id.itemMessages_imageView_profile);
                 linearLayout_destination = view.findViewById(R.id.itemMessages_linearLayout_destination);
                 linearLayout_main = view.findViewById(R.id.itemMessages_linearLayout_main);
+                textView_timeStamp = view.findViewById(R.id.itemMessages_textView_timeStamp);
 
             }
         }

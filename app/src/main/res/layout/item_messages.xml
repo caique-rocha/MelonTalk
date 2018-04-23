@@ -25,8 +25,24 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/itemMessages_textView_message"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:text="MESSAGE"
+            android:id="@+id/itemMessages_textView_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/itemMessages_textView_timeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2011.11.11 11:11"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="9dp" />
+    </LinearLayout>
 </LinearLayout>

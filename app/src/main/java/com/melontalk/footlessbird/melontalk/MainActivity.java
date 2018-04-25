@@ -6,8 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melontalk.footlessbird.melontalk.fragment.ChatFragment;
 import com.melontalk.footlessbird.melontalk.fragment.PeopleFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        passPushTokenToServer();
+    }
 
+    void passPushTokenToServer() {
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Map<String, Object> map = new HashMap<>();
+        map.put("pushToken", token);
+        FirebaseDatabase.getInstance().getReference().child("users").child(uId).updateChildren(map);
     }
 }

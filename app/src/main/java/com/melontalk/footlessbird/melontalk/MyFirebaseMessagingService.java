@@ -15,7 +15,6 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         if (remoteMessage.getData().size() > 0) {
             String title = remoteMessage.getData().get("title").toString();
             String text = remoteMessage.getData().get("text").toString();

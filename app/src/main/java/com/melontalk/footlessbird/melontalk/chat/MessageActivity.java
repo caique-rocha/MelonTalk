@@ -252,6 +252,7 @@ public class MessageActivity extends AppCompatActivity {
                 messageViewHolder.linearLayout_destination.setVisibility(View.INVISIBLE);
                 messageViewHolder.textView_message.setTextSize(25);
                 messageViewHolder.linearLayout_main.setGravity(Gravity.RIGHT);
+                setReadCount(position, messageViewHolder.textView_readCount_left);
 
                 //  friends's messages
             } else {
@@ -265,6 +266,8 @@ public class MessageActivity extends AppCompatActivity {
                 messageViewHolder.textView_message.setText(comments.get(position).message);
                 messageViewHolder.textView_message.setTextSize(25);
                 messageViewHolder.linearLayout_main.setGravity(Gravity.LEFT);
+                setReadCount(position, messageViewHolder.textView_readCount_right);
+
 
             }
             long unixTime = (long) comments.get(position).timeStamp;
@@ -272,6 +275,29 @@ public class MessageActivity extends AppCompatActivity {
             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
             String time = simpleDateFormat.format(date);
             messageViewHolder.textView_timeStamp.setText(time);
+        }
+
+        void setReadCount(final int position, final TextView textView) {
+            FirebaseDatabase.getInstance().getReference().child("chatRooms").child(chatRoomUid).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Boolean> users = (Map<String, Boolean>) dataSnapshot.getValue();
+
+                    int count = users.size() - comments.get(position).readUsers.size();
+                    if (count > 0) {
+                        textView.setVisibility(View.VISIBLE);
+                        textView.setText(String.valueOf(count));
+                    } else {
+                        textView.setVisibility(View.INVISIBLE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
         @Override
@@ -286,6 +312,8 @@ public class MessageActivity extends AppCompatActivity {
             public LinearLayout linearLayout_destination;
             public LinearLayout linearLayout_main;
             public TextView textView_timeStamp;
+            public TextView textView_readCount_left;
+            public TextView textView_readCount_right;
 
             public MessageViewHolder(View view) {
                 super(view);
@@ -295,6 +323,8 @@ public class MessageActivity extends AppCompatActivity {
                 linearLayout_destination = view.findViewById(R.id.itemMessages_linearLayout_destination);
                 linearLayout_main = view.findViewById(R.id.itemMessages_linearLayout_main);
                 textView_timeStamp = view.findViewById(R.id.itemMessages_textView_timeStamp);
+                textView_readCount_left = view.findViewById(R.id.itemMessages_textView_readCount_left);
+                textView_readCount_right = view.findViewById(R.id.itemMessages_textView_readCount_right);
 
             }
         }

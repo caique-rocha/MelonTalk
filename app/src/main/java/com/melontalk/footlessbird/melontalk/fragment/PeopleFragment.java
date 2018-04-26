@@ -99,6 +99,10 @@ public class PeopleFragment extends Fragment {
                     }
                 }
             });
+            if (userModels.get(position).comment != null) {
+                ((CustomViewHolder) holder).textView.setText(userModels.get(position).comment);
+
+            }
         }
 
         @Override
@@ -109,11 +113,13 @@ public class PeopleFragment extends Fragment {
         private class CustomViewHolder extends RecyclerView.ViewHolder {
             public ImageView imageView;
             public TextView textView;
+            public TextView textView_comment;
 
             public CustomViewHolder(View view) {
                 super(view);
                 imageView = view.findViewById(R.id.itemFriends_imageView);
                 textView = view.findViewById(R.id.itemFriends_textView);
+                textView_comment = view.findViewById(R.id.itemFriends_textView_comment);
             }
         }
     }

@@ -1,17 +1,16 @@
 package com.melontalk.footlessbird.melontalk.fragment;
 
 import android.app.ActivityOptions;
-import android.app.Fragment;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,31 +28,23 @@ import com.melontalk.footlessbird.melontalk.model.UserModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PeopleFragment extends Fragment {
-    @Nullable
+public class SelectFriendActivity extends AppCompatActivity {
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_people, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.peopleFragment_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
-        recyclerView.setAdapter(new PeopleFragmentRecyclerViewAdapter());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_select_friend);
 
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.peopleFragment_floatingButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), SelectFriendActivity.class));
-            }
-        });
-
-        return view;
+        RecyclerView recyclerView = findViewById(R.id.selectFriendActivity_recyclerView);
+        recyclerView.setAdapter(new SelectFriendRecyclerViewAdapter());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    class PeopleFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    class SelectFriendRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         List<UserModel> userModels;
 
-        public PeopleFragmentRecyclerViewAdapter() {
+        public SelectFriendRecyclerViewAdapter() {
             userModels = new ArrayList<>();
             final String myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
@@ -83,7 +74,7 @@ public class PeopleFragment extends Fragment {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friends, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friends_select, parent, false);
             return new CustomViewHolder(view);
         }
 
@@ -123,13 +114,16 @@ public class PeopleFragment extends Fragment {
             public ImageView imageView;
             public TextView textView;
             public TextView textView_comment;
+            public CheckBox checkBox;
 
             public CustomViewHolder(View view) {
                 super(view);
                 imageView = view.findViewById(R.id.itemFriends_imageView);
                 textView = view.findViewById(R.id.itemFriends_textView);
                 textView_comment = view.findViewById(R.id.itemFriends_textView_comment);
+                checkBox = view.findViewById(R.id.itemFriends_checkBox);
             }
         }
     }
+
 }

@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,12 +25,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.melontalk.footlessbird.melontalk.R;
 import com.melontalk.footlessbird.melontalk.chat.MessageActivity;
+import com.melontalk.footlessbird.melontalk.model.ChatModel;
 import com.melontalk.footlessbird.melontalk.model.UserModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectFriendActivity extends AppCompatActivity {
+    ChatModel chatModel = new ChatModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,15 @@ public class SelectFriendActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.selectFriendActivity_recyclerView);
         recyclerView.setAdapter(new SelectFriendRecyclerViewAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Button button = findViewById(R.id.selectFriendActivity_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                chatModel.users.put(myId, true);
+                FirebaseDatabase.getInstance().getReference().child("chatRooms").push().setValue(chatModel);
+            }
+        });
     }
 
     class SelectFriendRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -103,6 +116,16 @@ public class SelectFriendActivity extends AppCompatActivity {
                 ((CustomViewHolder) holder).textView.setText(userModels.get(position).comment);
 
             }
+            ((CustomViewHolder) holder).checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        chatModel.users.put(userModels.get(position).uId, true);
+                    } else {
+                        chatModel.users.remove(userModels.get(position));
+                    }
+                }
+            });
         }
 
         @Override
